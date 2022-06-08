@@ -13,16 +13,32 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import {useDispatch} from "react-redux";
+import {signup} from "../_actions/userAction";
+
+
 const theme = createTheme();
 
 export default function SignUp() {
+  const dispatch = useDispatch();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+    if(data.get('password') === data.get('password-confirm')){
+      let body = {
+        username: data.get('username'),
+        password: data.get('password'),
+        email: data.get('email'),
+      };
+      dispatch(signup(body)).then((res) => {
+        alert("가입이 완료되었습니다");
+        this.props.history.push('/login');
+      });
+    }else{
+      alert("비밀번호가 확인과 일치하지 않습니다");
+    }
   };
 
   return (
@@ -45,25 +61,15 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
+                  autoComplete="username"
+                  name="username"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="username"
+                  label="User Name"
                   autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -85,6 +91,17 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password-confirm"
+                  label="Confirm Password"
+                  type="password"
+                  id="password-confirm"
+                  autoComplete="confirm-password"
                 />
               </Grid>
               <Grid item xs={12}>
