@@ -6,6 +6,7 @@ import ListSubheader from '@mui/material/ListSubheader';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import {Link} from "react-router-dom";
+import {AddBox} from "@mui/icons-material";
 
 export const mainListItems = (
   <React.Fragment>
@@ -14,6 +15,12 @@ export const mainListItems = (
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
+    </ListItemButton>
+    <ListItemButton component={Link} to="/quiz/create">
+      <ListItemIcon>
+        <AddBox />
+      </ListItemIcon>
+      <ListItemText primary="퀴즈 생성" />
     </ListItemButton>
   </React.Fragment>
 );
@@ -29,7 +36,7 @@ export const secondaryListItems = (
       </ListItemIcon>
       <ListItemText primary="User Profile" />
     </ListItemButton>
-    <ListItemButton component={Link} to="/logout">
+    <ListItemButton component={Link} to="/signout">
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>

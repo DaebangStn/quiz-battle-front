@@ -17,12 +17,15 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from '../components/listItems';
-import BriefProfile from '../user/BriefProfile';
-import AvailableGames from './AvailableGames';
-import LaunchPad from "./LaunchPad";
-import {toggle_sidebar} from "../_actions/pageAction";
 import {useDispatch} from "react-redux";
+import {quiz_start, quiz_status, quiz_submit, toggle_sidebar} from "../_actions/pageAction";
 import {store} from "../index";
+import {useParams} from "react-router-dom";
+import {useState, useEffect, useRef} from "react";
+import QuizStatemnet from "./QuizStatemnet";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import useInterval from "../utils/useInterval";
 
 const drawerWidth = 240;
 
@@ -72,14 +75,88 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-function DashboardContent() {
+
+function QuizRoomContent() {
   const [open, setOpen] = React.useState(store.getState().page.showSidebar);
+  const [name, setName] = useState("No Name");
+  const [round, setRound] = useState(-1);
+  const [quiz, setQuiz] = useState("No Quiz");
+  const [solved, setSolved] = useState(false);
+
+  const answerInput = useRef(null);
+
   const dispatch = useDispatch();
+
+  useInterval(() => {
+      if(solved){
+      refreshQuiz(true);
+      setSolved(false);
+      }else{
+      refreshQuiz();
+      }
+  }, 200);
 
   const toggleDrawer = () => {
     dispatch(toggle_sidebar());
     setOpen(store.getState().page.showSidebar);
   };
+
+  let {slug} = useParams();
+
+  useEffect(() => {
+      refreshQuiz(true);
+  }, []);
+
+  const handleSubmit = () => {
+      if(round === 0){
+          dispatch(quiz_start(slug))
+              .then((res) => {
+                  console.log(res);
+                  alert("퀴즈를 시작합니다");
+                  refreshQuiz(true);
+              })
+              .catch((err) => {
+                  console.log(err);
+                  refreshQuiz();
+              })
+      }else{
+          dispatch(quiz_submit(slug, answerInput.current.value))
+              .then((res) => {
+                  if(store.getState().page.answerCorrect){
+                      alert("정답입니다");
+                      setSolved(true);
+                      refreshQuiz(true);
+                  }else{
+                      alert("틀렸습니다");
+                      refreshQuiz();
+                  }
+              })
+              .catch((err) => {
+                  console.log(err);
+                  refreshQuiz();
+              })
+      }
+
+      answerInput.current.value = "";
+  }
+
+  const refreshQuiz = (ignore_round = false) => {
+      dispatch(quiz_status(slug))
+          .then((res) => {
+              console.log(res);
+              console.log(res.payload.round + ' server');
+              console.log(round + ' browser');
+              if(!ignore_round && round !== res.payload.round){
+                  alert("다른 사람이 이미 맞추었습니다");
+              }
+
+              setName(res.payload.name);
+              setRound(res.payload.round);
+              setQuiz(res.payload.quiz);
+          }).catch((err) => {
+              console.log(err);
+      });
+  }
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -110,7 +187,7 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Quiz Battle
+              Quiz Room [{name}]
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
@@ -154,36 +231,57 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              {/* LaunchPad */}
-              <Grid item xs={12} md={4} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 280,
-                  }}
-                >
-                  <LaunchPad/>
-                </Paper>
-              </Grid>
               {/* Recent BriefProfile */}
-              <Grid item xs={12} md={4} lg={3}>
+              <Grid item xs={12} md={12} lg={6} >
                 <Paper
                   sx={{
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: 280,
+                    height: 200,
                   }}
                 >
-                  <BriefProfile />
+                  <QuizStatemnet round={round} quiz={quiz}/>
                 </Paper>
               </Grid>
-              {/* Recent AvailableGames */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <AvailableGames />
+              <Grid item xs={12} md={12} lg={6} >
+                <Paper
+                  sx={{
+                    p: 3,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 100,
+                  }}
+                >
+                    <Box>
+                    <Grid
+                        container direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"center"}
+                        spacing={4}
+                    >
+                        <Grid item>
+                    <TextField
+                        inputRef={answerInput}
+                      name="answer"
+                      required
+                      id="answer"
+                      label="Answer"
+                      fullWidth
+                      autoFocus
+                    />
+                        </Grid>
+                        <Grid item>
+            <Button
+              type="submit"
+              variant="contained"
+              onClick={handleSubmit}
+            >
+              제출
+            </Button>
+                        </Grid>
+                    </Grid>
+                        </Box>
                 </Paper>
               </Grid>
             </Grid>
@@ -194,6 +292,6 @@ function DashboardContent() {
   );
 }
 
-export default function Dashboard() {
-  return <DashboardContent />;
+export default function QuizRoom() {
+  return <QuizRoomContent />;
 }

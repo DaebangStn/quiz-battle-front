@@ -11,18 +11,45 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import {useDispatch} from "react-redux";
+import {signin} from "../_actions/userAction";
+import {setAuthToken} from "../utils/axios";
+import {store} from "../index";
 
 const theme = createTheme();
 
 export default function SignIn() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
+
+    const body = {
+      username: data.get('email'),
       password: data.get('password'),
-    });
+    };
+    dispatch(signin(body))
+        .then((res) => {
+            if(store.getState().user.success){
+                localStorage.setItem('AuthToken', res.payload.token);
+                setAuthToken(localStorage.AuthToken);
+                navigate('/dashboard');
+            }else{
+                alert("로그인에 실패하였습니다.");
+                localStorage.removeItem('AuthToken');
+                setAuthToken(localStorage.AuthToken);
+            }
+        })
+        .catch((err) => {
+            alert("로그인에 실패하였습니다.");
+            localStorage.removeItem('AuthToken');
+            setAuthToken(localStorage.AuthToken);
+            console.log(err);
+        });
+
   };
 
   return (

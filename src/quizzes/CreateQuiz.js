@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState, useEffect} from "react";
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -17,14 +18,18 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from '../components/listItems';
-import BriefProfile from '../user/BriefProfile';
-import AvailableGames from './AvailableGames';
-import LaunchPad from "./LaunchPad";
-import {toggle_sidebar} from "../_actions/pageAction";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import {Autocomplete} from "@mui/material";
+import {quiz_create, toggle_sidebar} from "../_actions/pageAction";
 import {useDispatch} from "react-redux";
 import {store} from "../index";
+import {get_list} from "../_actions/userAction";
+import {useNavigate} from "react-router-dom";
+import slugify from "slugify";
 
 const drawerWidth = 240;
+
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -72,14 +77,63 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-function DashboardContent() {
-  const [open, setOpen] = React.useState(store.getState().page.showSidebar);
+function CreateQuizContent() {
+  const [open, setOpen] = useState(store.getState().page.showSidebar);
+  const [member, setMember] = useState("");
+  const [name, setName] = useState("");
+  const [memberList, setMemberList] = useState([]);
+  
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+  dispatch(get_list())
+      .then((res) => {
+        res.payload.forEach((item, i) => {
+          item.id = i+1;
+        });
+        console.log(res.payload);
+        setMemberList(res.payload);
+      })
+      .catch((err) => {
+        console.log((err));
+      })
+  }, [dispatch]);
+
 
   const toggleDrawer = () => {
-    dispatch(toggle_sidebar());
+    dispatch(toggle_sidebar())
     setOpen(store.getState().page.showSidebar);
   };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const slug = slugify(name, {lower: true});
+
+    let memberString = "";
+    console.log(member.newMember);
+    member.newMember.forEach((item, i)=> {
+      if(i === 0){
+        memberString = item.username;
+      }else{
+        memberString += ',' + item.username;
+      }
+    });
+
+    const body = {
+      name: name,
+      participants_username: memberString
+    }
+      dispatch(quiz_create(slug, body))
+          .then((res) => {
+            console.log(res);
+            alert("퀴즈를 만들었습니다");
+            navigate(`/quiz/${slug}`);
+          })
+          .catch((err) => {
+            alert("퀴즈를 만들지 못하였습니다.");
+            console.log(err);
+          });
+  }
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -110,7 +164,7 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Quiz Battle
+              퀴즈 만들기
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
@@ -154,36 +208,56 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              {/* LaunchPad */}
-              <Grid item xs={12} md={4} lg={9}>
+              <Grid item xs={12} md={6} lg={9}>
                 <Paper
                   sx={{
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: 280,
+                    height: 480,
                   }}
                 >
-                  <LaunchPad/>
-                </Paper>
-              </Grid>
-              {/* Recent BriefProfile */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 280,
-                  }}
-                >
-                  <BriefProfile />
-                </Paper>
-              </Grid>
-              {/* Recent AvailableGames */}
+          <Box sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <AvailableGames />
+                <TextField
+                  name="quizname"
+                  required
+                  fullWidth
+                  id="quizname"
+                  label="퀴즈 이름"
+                  autoFocus
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Autocomplete
+                    id="participants"
+                    multiple
+                    isOptionEqualToValue={(opt, val) => opt.id === val.id}
+                    options={memberList}
+                    getOptionLabel={(option) => option.username}
+                    renderInput={(params) => (
+                        <TextField {...params} label="참가자" variant="outlined"/>
+                    )}
+                    onChange={(_event, newMember) =>{
+                      setMember({member, newMember});
+                    }}
+                />
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={handleSubmit}
+            >
+              퀴즈 시작
+            </Button>
+          </Box>
                 </Paper>
               </Grid>
             </Grid>
@@ -194,6 +268,6 @@ function DashboardContent() {
   );
 }
 
-export default function Dashboard() {
-  return <DashboardContent />;
+export default function CreateQuiz() {
+  return <CreateQuizContent />;
 }

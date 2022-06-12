@@ -6,9 +6,16 @@ export const request = (method, url, data) => {
     return axios({
         method,
         url: DOMAIN + url,
-        withCredentials: true,
         data,
     })
         .then((res) => res.data)
         .catch((err) => console.log(err));
+}
+
+export function setAuthToken(token) {
+    if(token){
+        axios.defaults.headers.common['Authorization'] = `Token ${token}`;
+    }else{
+        delete axios.defaults.headers.common['Authorization'];
+    }
 }

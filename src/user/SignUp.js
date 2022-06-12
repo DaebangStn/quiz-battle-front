@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {useNavigate} from "react-router-dom";
 
 import {useDispatch} from "react-redux";
 import {signup} from "../_actions/userAction";
@@ -21,6 +22,7 @@ const theme = createTheme();
 
 export default function SignUp() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -32,10 +34,16 @@ export default function SignUp() {
         password: data.get('password'),
         email: data.get('email'),
       };
-      dispatch(signup(body)).then((res) => {
-        alert("가입이 완료되었습니다");
-        this.props.history.push('/login');
-      });
+      dispatch(signup(body))
+          .then((res) => {
+            console.log(res);
+            alert("가입이 완료되었습니다");
+            navigate('/signin');
+          })
+          .catch((err) => {
+            alert("가입에 실패하였습니다.");
+            console.log(err);
+          });
     }else{
       alert("비밀번호가 확인과 일치하지 않습니다");
     }
