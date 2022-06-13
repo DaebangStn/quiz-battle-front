@@ -18,7 +18,7 @@ export default function user (state = initialState, action) {
                 return {...state, showSidebar: !state.showSidebar};
             }
         case QUIZ_SUBMIT:
-            return {...state, answerCorrect: action.payload};
+            return {...state, answerCorrect: action.payload.message};
         case QUIZ_STATUS:
             return {...state, quizForbidden: action.payload.code};
         case QUIZ_START:

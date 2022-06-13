@@ -123,7 +123,7 @@ function QuizRoomContent() {
       }else{
           dispatch(quiz_submit(slug, answerInput.current.value))
               .then((res) => {
-                  if(store.getState().page.answerCorrect){
+                  if(store.getState().page.answerCorrect === "answer is correct, going next round"){
                       alert("정답입니다");
                       setSolved(true);
                       refreshQuiz(true);
