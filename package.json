@@ -11,6 +11,7 @@
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
+    "env-cmd": "^10.1.0",
     "js-cookie": "^3.0.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -26,8 +27,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "env-cmd -f ./src/.env.local react-scripts start",
+    "start_prod": "env-cmd -f ./src/.env.production react-scripts start",
+    "build": "env-cmd -f ./src/.env.production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

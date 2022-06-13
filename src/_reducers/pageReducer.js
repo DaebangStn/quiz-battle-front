@@ -5,7 +5,8 @@ import {
 
 const initialState = {
     showSidebar: true,
-    answerCorrect: false
+    answerCorrect: false,
+    quizForbidden: false
 };
 
 export default function user (state = initialState, action) {
@@ -19,7 +20,7 @@ export default function user (state = initialState, action) {
         case QUIZ_SUBMIT:
             return {...state, answerCorrect: action.payload};
         case QUIZ_STATUS:
-            return {...state};
+            return {...state, quizForbidden: action.payload.code};
         case QUIZ_START:
             return {...state};
         case QUIZ_CREATE:

@@ -20,7 +20,7 @@ import { mainListItems, secondaryListItems } from '../components/listItems';
 import {useDispatch} from "react-redux";
 import {quiz_start, quiz_status, quiz_submit, toggle_sidebar} from "../_actions/pageAction";
 import {store} from "../index";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useState, useEffect, useRef} from "react";
 import QuizStatemnet from "./QuizStatemnet";
 import TextField from "@mui/material/TextField";
@@ -86,6 +86,7 @@ function QuizRoomContent() {
   const answerInput = useRef(null);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useInterval(() => {
       if(solved){
@@ -144,8 +145,13 @@ function QuizRoomContent() {
       dispatch(quiz_status(slug))
           .then((res) => {
               console.log(res);
-              console.log(res.payload.round + ' server');
-              console.log(round + ' browser');
+              let code = store.getState().page.quizForbidden;
+              if(code){
+                  console.log(`error code ${res.payload.code}`);
+                  alert("참가자가 아닙니다. 참여할 수 없습니다");
+                  navigate('/dashboard');
+              }
+
               if(!ignore_round && round !== res.payload.round){
                   alert("다른 사람이 이미 맞추었습니다");
               }
