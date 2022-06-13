@@ -50,7 +50,7 @@ export function quiz_create(slug_room, dataToSubmit){
 }
 
 export function quiz_list(){
-    const QUIZ_URL = QUIZ_BASE_URL + 'list/';
+    const QUIZ_URL = QUIZ_BASE_URL + 'available/';
     const data = request("get", QUIZ_URL);
     return{
         type: QUIZ_LIST,
