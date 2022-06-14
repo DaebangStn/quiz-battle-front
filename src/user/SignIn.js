@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -68,7 +66,7 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+              로그인
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -76,9 +74,8 @@ export default function SignIn() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="이메일"
               name="email"
-              autoComplete="email"
               autoFocus
             />
             <TextField
@@ -86,14 +83,9 @@ export default function SignIn() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="비밀번호"
               type="password"
               id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
             />
             <Button
               type="submit"
@@ -101,14 +93,14 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+                로그인
             </Button>
-            <Grid container>
+            <Grid container direction={"column"}>
               <Grid item xs component={Link} to="/reset-password">
-                  Forgot password?
+                  비밀번호를 잊으셨나요?
               </Grid>
               <Grid item component={Link} to="/signup">
-                  {"Don't have an account? Sign Up"}
+                  {"아직 회원이 아니신가요? 회원가입 하세요!"}
               </Grid>
             </Grid>
           </Box>

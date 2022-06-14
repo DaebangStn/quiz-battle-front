@@ -25,7 +25,7 @@ export default function BriefProfile() {
 
   return (
     <React.Fragment>
-      <Title>User</Title>
+      <Title>사용자</Title>
       <Typography component="p" variant="h4">
           {username}
       </Typography>
@@ -34,7 +34,7 @@ export default function BriefProfile() {
       </Typography>
       <div>
         <Link color="primary" href="/profile">
-            View Detail
+            자세히 보기
         </Link>
       </div>
     </React.Fragment>

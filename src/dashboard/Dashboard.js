@@ -9,13 +9,11 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from '../components/listItems';
 import BriefProfile from '../user/BriefProfile';
 import AvailableGames from './AvailableGames';
@@ -110,13 +108,8 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Quiz Battle
+              퀴즈 게임
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -155,34 +148,39 @@ function DashboardContent() {
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               {/* LaunchPad */}
-              <Grid item xs={12} md={4} lg={9}>
+              <Grid item xs={4} md={4} lg={4}>
                 <Paper
                   sx={{
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
                     height: 280,
-                  }}
-                >
+                  }}>
                   <LaunchPad/>
                 </Paper>
               </Grid>
+
               {/* Recent BriefProfile */}
-              <Grid item xs={12} md={4} lg={3}>
+              <Grid item xs={8} md={8} lg={8}>
                 <Paper
                   sx={{
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
                     height: 280,
-                  }}
-                >
+                  }}>
                   <BriefProfile />
                 </Paper>
               </Grid>
+
               {/* Recent AvailableGames */}
               <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                <Paper
+                    sx={{
+                      p: 2,
+                      display: 'flex',
+                      flexDirection: 'column'
+                }}>
                   <AvailableGames />
                 </Paper>
               </Grid>

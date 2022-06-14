@@ -14,13 +14,13 @@ export const mainListItems = (
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
-      <ListItemText primary="Dashboard" />
+      <ListItemText primary="홈" />
     </ListItemButton>
     <ListItemButton component={Link} to="/quiz/create">
       <ListItemIcon>
         <AddBox />
       </ListItemIcon>
-      <ListItemText primary="퀴즈 생성" />
+      <ListItemText primary="게임 만들기" />
     </ListItemButton>
   </React.Fragment>
 );
@@ -34,13 +34,13 @@ export const secondaryListItems = (
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="User Profile" />
+      <ListItemText primary="사용자 정보" />
     </ListItemButton>
     <ListItemButton component={Link} to="/signout">
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Logout" />
+      <ListItemText primary="로그아웃" />
     </ListItemButton>
   </React.Fragment>
 );
