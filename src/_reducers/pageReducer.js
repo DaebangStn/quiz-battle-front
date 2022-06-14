@@ -5,9 +5,13 @@ import {
 
 const initialState = {
     showSidebar: false,
-    answerCorrect: false,
-    quizForbidden: false
+    message: "",
+    quizForbidden: false,
+    areYouHost: false
 };
+
+export const PAGE_MESSAGE_START_ACCEPTED = "quiz room is now started, going next round";
+export const PAGE_MESSAGE_ANSWER_CORRECT = "answer is correct, going next round";
 
 export default function user (state = initialState, action) {
     switch (action.type){
@@ -18,11 +22,11 @@ export default function user (state = initialState, action) {
                 return {...state, showSidebar: !state.showSidebar};
             }
         case QUIZ_SUBMIT:
-            return {...state, answerCorrect: action.payload.message};
+            return {...state, message: action.payload.message};
         case QUIZ_STATUS:
             return {...state, quizForbidden: action.payload.code};
         case QUIZ_START:
-            return {...state};
+            return {...state, message: action.payload.message};
         case QUIZ_CREATE:
             return {...state};
         case QUIZ_LIST:

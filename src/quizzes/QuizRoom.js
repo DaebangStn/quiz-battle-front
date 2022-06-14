@@ -9,13 +9,11 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from '../components/listItems';
 import {useDispatch} from "react-redux";
 import {quiz_start, quiz_status, quiz_submit, toggle_sidebar} from "../_actions/pageAction";
@@ -26,6 +24,7 @@ import QuizStatemnet from "./QuizStatemnet";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import useInterval from "../utils/useInterval";
+import {PAGE_MESSAGE_ANSWER_CORRECT, PAGE_MESSAGE_START_ACCEPTED} from "../_reducers/pageReducer";
 
 const drawerWidth = 240;
 
@@ -106,6 +105,7 @@ function QuizRoomContent() {
 
   useEffect(() => {
       refreshQuiz(true);
+      // eslint-disable-next-line
   }, []);
 
   const handleSubmit = () => {
@@ -113,8 +113,11 @@ function QuizRoomContent() {
           dispatch(quiz_start(slug))
               .then((res) => {
                   console.log(res);
-                  alert("퀴즈를 시작합니다");
-                  refreshQuiz(true);
+                  if(store.getState().page.message === PAGE_MESSAGE_START_ACCEPTED) {
+                      alert("퀴즈를 시작합니다");
+                  }else{
+                      alert("방장만 퀴즈를 시작할 수 있습니다");
+                  }
               })
               .catch((err) => {
                   console.log(err);
@@ -123,7 +126,9 @@ function QuizRoomContent() {
       }else{
           dispatch(quiz_submit(slug, answerInput.current.value))
               .then((res) => {
-                  if(store.getState().page.answerCorrect === "answer is correct, going next round"){
+                  console.log(res);
+
+                  if(store.getState().page.message === PAGE_MESSAGE_ANSWER_CORRECT){
                       alert("정답입니다");
                       setSolved(true);
                       refreshQuiz(true);
@@ -195,11 +200,6 @@ function QuizRoomContent() {
             >
               Quiz Room [{name}]
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
