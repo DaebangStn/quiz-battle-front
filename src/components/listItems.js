@@ -2,6 +2,7 @@ import * as React from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import ListIcon from '@mui/icons-material/List';
 import ListSubheader from '@mui/material/ListSubheader';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -22,13 +23,19 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="게임 만들기" />
     </ListItemButton>
+    <ListItemButton component={Link} to="/quiz/available">
+      <ListItemIcon>
+        <ListIcon />
+      </ListItemIcon>
+      <ListItemText primary="게임 목록" />
+    </ListItemButton>
   </React.Fragment>
 );
 
 export const secondaryListItems = (
   <React.Fragment>
     <ListSubheader component="div" inset>
-        User Center
+        계정
     </ListSubheader>
     <ListItemButton component={Link} to="/profile">
       <ListItemIcon>

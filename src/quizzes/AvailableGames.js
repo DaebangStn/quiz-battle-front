@@ -1,6 +1,14 @@
 import * as React from 'react';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Title from '../dashboard/Title';
+import {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
+import {quiz_list} from "../_actions/pageAction";
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import MuiAppBar from '@mui/material/AppBar';
@@ -15,14 +23,14 @@ import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { mainListItems, secondaryListItems } from '../components/listItems';
-import BriefProfile from '../user/BriefProfile';
-import BriefAvailableGames from './BriefAvailableGames';
-import LaunchPad from "./LaunchPad";
 import {toggle_sidebar} from "../_actions/pageAction";
-import {useDispatch} from "react-redux";
 import {store} from "../index";
+import CssBaseline from "@mui/material/CssBaseline";
+import {useNavigate} from "react-router-dom";
+import Button from "@mui/material/Button";
 
 const drawerWidth = 240;
+
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -70,14 +78,39 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-function DashboardContent() {
-  const [open, setOpen] = React.useState(store.getState().page.showSidebar);
+function AvailableGamesContent() {
+  const [list, setList] = useState([]);
+  const [open, setOpen] = useState(store.getState().page.showSidebar);
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const toggleDrawer = () => {
-    dispatch(toggle_sidebar());
+    dispatch(toggle_sidebar())
     setOpen(store.getState().page.showSidebar);
   };
+
+  useEffect(() => {
+    dispatch(quiz_list())
+        .then((res) => {
+          res.payload.forEach((row, j) => {
+              let memberString = "";
+                  row.participants.forEach((item, i) => {
+
+                  if(i === 0){
+                      memberString = item.username;
+                  }else{
+                      memberString += ', ' + item.username;
+                  }
+              })
+              row.memberString = memberString;
+          })
+          setList(res.payload);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+  }, [dispatch])
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -108,7 +141,7 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              퀴즈 게임
+              퀴즈 만들기
             </Typography>
           </Toolbar>
         </AppBar>
@@ -147,41 +180,45 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              {/* LaunchPad */}
-              <Grid item xs={4} md={4} lg={4}>
+              <Grid item xs={12} md={12} lg={12}>
                 <Paper
                   sx={{
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: 280,
-                  }}>
-                  <LaunchPad/>
-                </Paper>
-              </Grid>
+                  }}
+                >
 
-              {/* Recent BriefProfile */}
-              <Grid item xs={8} md={8} lg={8}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 280,
-                  }}>
-                  <BriefProfile />
-                </Paper>
-              </Grid>
+      <Title>참가 가능한 게임</Title>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>이름</TableCell>
+            <TableCell>방장</TableCell>
+            <TableCell>참여자</TableCell>
+            <TableCell>종류</TableCell>
+            <TableCell>참가버튼</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {list.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.host.username}</TableCell>
+              <TableCell>{row.memberString}</TableCell>
+              <TableCell>{row.type}</TableCell>
+                <TableCell>
+                    <Button onClick={()=>{
+                        let slug = row.name.replaceAll(' ', '-').toLowerCase();
+                        navigate(`/quiz/${slug}`)}
+                    }>참가</Button>
+                </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
-              {/* Recent AvailableGames */}
-              <Grid item xs={12}>
-                <Paper
-                    sx={{
-                      p: 2,
-                      display: 'flex',
-                      flexDirection: 'column'
-                }}>
-                  <BriefAvailableGames />
+
                 </Paper>
               </Grid>
             </Grid>
@@ -192,6 +229,6 @@ function DashboardContent() {
   );
 }
 
-export default function Dashboard() {
-  return <DashboardContent />;
+export default function AvailableGames() {
+  return <AvailableGamesContent />;
 }

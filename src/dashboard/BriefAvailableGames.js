@@ -14,10 +14,23 @@ function preventDefault(event) {
   event.preventDefault();
 }
 
-export default function AvailableGames() {
+export default function BriefAvailableGames() {
   const [list, setList] = useState([]);
+  const [more, setMore] = useState(false);
   const dispatch = useDispatch();
 
+  let dottedElement;
+  if(more){
+      dottedElement =
+          <TableRow>
+              <TableCell>...</TableCell>
+              <TableCell>...</TableCell>
+              <TableCell>...</TableCell>
+              <TableCell>...</TableCell>
+            </TableRow>
+  }else{
+      dottedElement = <></>;
+  }
 
   useEffect(() => {
     dispatch(quiz_list())
@@ -36,7 +49,12 @@ export default function AvailableGames() {
               })
               row.memberString = memberString;
           })
-          setList(res.payload);
+          setList(res.payload.slice(0, 5));
+          if(res.payload.length > 5){
+              setMore(true);
+          }else{
+              setMore(false);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -64,6 +82,7 @@ export default function AvailableGames() {
               <TableCell>{row.type}</TableCell>
             </TableRow>
           ))}
+            {dottedElement}
         </TableBody>
       </Table>
       <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>

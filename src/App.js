@@ -9,6 +9,7 @@ import SignOut from "./user/SignOut";
 import DetailProfile from "./user/DetailProfile"
 import CreateQuiz from "./quizzes/CreateQuiz";
 import QuizRoom from "./quizzes/QuizRoom";
+import AvailableGames from "./quizzes/AvailableGames";
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
               <Route path="/dashboard" element={<Private Component={Dashboard}/>}/>
               <Route path="/profile" element={<Private Component={DetailProfile}/>}/>
               <Route path="/quiz/create" element={<Private Component={CreateQuiz}/>}/>
+              <Route path="/quiz/available" element={<Private Component={AvailableGames}/>}/>
               <Route path="/quiz/:slug" element={<Private Component={QuizRoom}/>}/>
               <Route path="/signin" element={<SignIn/>}/>
               <Route path="/signup" element={<SignUp/>}/>
