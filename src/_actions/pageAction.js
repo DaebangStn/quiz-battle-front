@@ -1,6 +1,7 @@
 import {
     TOGGLE_SIDE, QUIZ_SUBMIT, QUIZ_STATUS,
-    QUIZ_START, QUIZ_CREATE, QUIZ_LIST
+    QUIZ_START, QUIZ_CREATE, QUIZ_LIST, QUIZ_UPDATE,
+    QUIZ_DELETE
 } from "./types";
 import {request} from "../utils/axios";
 
@@ -54,6 +55,24 @@ export function quiz_list(){
     const data = request("get", QUIZ_URL);
     return{
         type: QUIZ_LIST,
+        payload: data
+    };
+}
+
+export function quiz_update(slug_room, dataToSubmit){
+    const QUIZ_URL = QUIZ_BASE_URL + slug_room + '/';
+    const data = request("put", QUIZ_URL, dataToSubmit);
+    return{
+        type: QUIZ_UPDATE,
+        payload: data
+    };
+}
+
+export function quiz_delete(slug_room){
+    const QUIZ_URL = QUIZ_BASE_URL + slug_room + '/';
+    const data = request("delete", QUIZ_URL);
+    return{
+        type: QUIZ_DELETE,
         payload: data
     };
 }

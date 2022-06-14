@@ -24,7 +24,11 @@ import QuizStatemnet from "./QuizStatemnet";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import useInterval from "../utils/useInterval";
-import {PAGE_MESSAGE_ANSWER_CORRECT, PAGE_MESSAGE_START_ACCEPTED} from "../_reducers/pageReducer";
+import {
+    PAGE_MESSAGE_ANSWER_CORRECT,
+    PAGE_MESSAGE_FORBIDDEN,
+    PAGE_MESSAGE_START_ACCEPTED
+} from "../_reducers/pageReducer";
 
 const drawerWidth = 240;
 
@@ -150,9 +154,7 @@ function QuizRoomContent() {
       dispatch(quiz_status(slug))
           .then((res) => {
               console.log(res);
-              let code = store.getState().page.quizForbidden;
-              if(code){
-                  console.log(`error code ${res.payload.code}`);
+              if(store.getState().page.message === PAGE_MESSAGE_FORBIDDEN){
                   alert("참가자가 아닙니다. 참여할 수 없습니다");
                   navigate('/dashboard');
               }

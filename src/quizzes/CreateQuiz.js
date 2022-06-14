@@ -89,7 +89,6 @@ function CreateQuizContent() {
         res.payload.forEach((item, i) => {
           item.id = i+1;
         });
-        console.log(res.payload);
         setMemberList(res.payload);
       })
       .catch((err) => {
@@ -200,7 +199,7 @@ function CreateQuizContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6} lg={9}>
+              <Grid item xs={6} md={6} lg={6}>
                 <Paper
                   sx={{
                     p: 2,
@@ -230,6 +229,7 @@ function CreateQuizContent() {
                     multiple
                     isOptionEqualToValue={(opt, val) => opt.id === val.id}
                     options={memberList}
+                    disableCloseOnSelect
                     getOptionLabel={(option) => option.username}
                     renderInput={(params) => (
                         <TextField {...params} label="참가자" variant="outlined"/>
