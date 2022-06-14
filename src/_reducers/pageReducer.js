@@ -4,7 +4,7 @@ import {
 } from '../_actions/types';
 
 const initialState = {
-    showSidebar: true,
+    showSidebar: false,
     answerCorrect: false,
     quizForbidden: false
 };

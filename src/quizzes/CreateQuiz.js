@@ -26,7 +26,6 @@ import {useDispatch} from "react-redux";
 import {store} from "../index";
 import {get_list} from "../_actions/userAction";
 import {useNavigate} from "react-router-dom";
-import slugify from "slugify";
 
 const drawerWidth = 240;
 
@@ -107,7 +106,7 @@ function CreateQuizContent() {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    const slug = slugify(name, {lower: true});
+    const slug = name.replaceAll(' ', '-').toLowerCase();
 
     let memberString = "";
     console.log(member.newMember);
