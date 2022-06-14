@@ -4,7 +4,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Title from '../dashboard/Title';
 import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {quiz_list} from "../_actions/pageAction";
@@ -141,7 +140,7 @@ function AvailableGamesContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              퀴즈 만들기
+              참가 가능한 게임
             </Typography>
           </Toolbar>
         </AppBar>
@@ -188,8 +187,6 @@ function AvailableGamesContent() {
                     flexDirection: 'column',
                   }}
                 >
-
-      <Title>참가 가능한 게임</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -197,7 +194,8 @@ function AvailableGamesContent() {
             <TableCell>방장</TableCell>
             <TableCell>참여자</TableCell>
             <TableCell>종류</TableCell>
-            <TableCell>참가버튼</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -212,6 +210,12 @@ function AvailableGamesContent() {
                         let slug = row.name.replaceAll(' ', '-').toLowerCase();
                         navigate(`/quiz/${slug}`)}
                     }>참가</Button>
+                </TableCell>
+                <TableCell>
+                    <Button onClick={()=>{
+                        let slug = row.name.replaceAll(' ', '-').toLowerCase();
+                        navigate(`/quiz/update/${slug}`);
+                    }}>수정</Button>
                 </TableCell>
             </TableRow>
           ))}
