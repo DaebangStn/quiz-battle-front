@@ -85,7 +85,7 @@ function QuizRoomContent() {
   const [name, setName] = useState("No Name");
   const [round, setRound] = useState(-1);
   const [quiz, setQuiz] = useState("No Quiz");
-  const [solved, setSolved] = useState(false);
+  const [whileSubmit, setWhileSubmit] = useState(false);
 
   const answerInput = useRef(null);
 
@@ -93,13 +93,8 @@ function QuizRoomContent() {
   const navigate = useNavigate();
 
   useInterval(() => {
-      if(solved){
-      refreshQuiz(true);
-      setSolved(false);
-      }else{
       refreshQuiz();
-      }
-  }, 200);
+  }, whileSubmit ? null : 400);
 
   const toggleDrawer = () => {
     dispatch(toggle_sidebar());
@@ -114,6 +109,8 @@ function QuizRoomContent() {
   }, []);
 
   const handleSubmit = () => {
+      setWhileSubmit(true);
+
       if(round === 0){
           dispatch(quiz_start(slug))
               .then((res) => {
@@ -135,7 +132,6 @@ function QuizRoomContent() {
 
                   if(store.getState().page.message === PAGE_MESSAGE_ANSWER_CORRECT){
                       toast_basic_success("정답입니다");
-                      setSolved(true);
                       refreshQuiz(true);
                   }else{
                       toast_basic_error("틀렸습니다");
@@ -149,6 +145,7 @@ function QuizRoomContent() {
       }
 
       answerInput.current.value = "";
+      setWhileSubmit(false);
   }
 
   const refreshQuiz = (ignore_round = false) => {
@@ -160,7 +157,7 @@ function QuizRoomContent() {
                   navigate('/dashboard');
               }
 
-              if(!ignore_round && round !== res.payload.round){
+              if(!ignore_round && (round !== res.payload.round)){
                   toast_basic_error("다른 사람이 이미 맞추었습니다");
               }
 
