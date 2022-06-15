@@ -30,7 +30,6 @@ import {
     PAGE_MESSAGE_START_ACCEPTED
 } from "../_reducers/pageReducer";
 import {toast_basic_error, toast_basic_info, toast_basic_success} from "../utils/toastifies";
-import slugify from "slugify";
 
 const drawerWidth = 240;
 

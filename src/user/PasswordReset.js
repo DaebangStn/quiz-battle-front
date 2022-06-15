@@ -15,7 +15,6 @@ import {get_password_token} from "../_actions/userAction";
 import {store} from "../index";
 import {USER_MESSAGE_FAILED} from "../_reducers/userReducer";
 import {
-    toast_basic_error,
     toast_basic_loading,
     toast_basic_update_error,
     toast_basic_update_success
