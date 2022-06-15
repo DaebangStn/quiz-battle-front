@@ -1,21 +1,24 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {useNavigate} from "react-router-dom";
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
-import {useDispatch} from "react-redux";
-import {signup} from "../_actions/userAction";
-import {toast_basic_error, toast_basic_success, toast_basic_warn} from "../utils/toastifies";
-
+import { useDispatch } from "react-redux";
+import { signup } from "../_actions/userAction";
+import {
+  toast_basic_error,
+  toast_basic_success,
+  toast_basic_warn,
+} from "../utils/toastifies";
 
 const theme = createTheme();
 
@@ -27,23 +30,23 @@ export default function SignUp() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    if(data.get('password') === data.get('password-confirm')){
+    if (data.get("password") === data.get("password-confirm")) {
       let body = {
-        username: data.get('username'),
-        password: data.get('password'),
-        email: data.get('email'),
+        username: data.get("username"),
+        password: data.get("password"),
+        email: data.get("email"),
       };
       dispatch(signup(body))
-          .then((res) => {
-            console.log(res);
-            toast_basic_success(`${data.get('username')}님 가입을 환영합니다`);
-            navigate('/signin');
-          })
-          .catch((err) => {
-            toast_basic_error("가입에 실패하였습니다");
-            console.log(err);
-          });
-    }else{
+        .then((res) => {
+          console.log(res);
+          toast_basic_success(`${data.get("username")}님 가입을 환영합니다`);
+          navigate("/signin");
+        })
+        .catch((err) => {
+          toast_basic_error("가입에 실패하였습니다");
+          console.log(err);
+        });
+    } else {
       toast_basic_warn("비밀번호가 확인과 일치하지 않습니다");
     }
   };
@@ -55,18 +58,23 @@ export default function SignUp() {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             회원가입
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField

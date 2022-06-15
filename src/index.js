@@ -1,29 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import {Provider} from "react-redux";
-import {applyMiddleware, createStore} from "redux";
-import rootReducer from "./_reducers"
-import {composeWithDevTools} from "redux-devtools-extension";
-import ReduxThunk from 'redux-thunk';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
+import { applyMiddleware, createStore } from "redux";
+import rootReducer from "./_reducers";
+import { composeWithDevTools } from "redux-devtools-extension";
+import ReduxThunk from "redux-thunk";
 import promiseMiddleware from "redux-promise";
-import {setAuthToken} from "./utils/axios";
+import { setAuthToken } from "./utils/axios";
 
-export const store = createStore(rootReducer,
-    composeWithDevTools(
-    applyMiddleware(
-    ReduxThunk,
-    promiseMiddleware
-)));
+export const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(ReduxThunk, promiseMiddleware))
+);
 setAuthToken(localStorage.AuthToken);
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <Provider store={store}>
-        <App/>
-    </Provider>
+  <Provider store={store}>
+    <App />
+  </Provider>
 );
 
 // If you want to start meas    uring performance in your app, pass a function

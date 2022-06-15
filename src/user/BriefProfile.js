@@ -1,10 +1,10 @@
-import * as React from 'react';
-import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
-import Title from '../dashboard/Title';
-import {useDispatch} from "react-redux";
-import {get_profile} from "../_actions/userAction";
-import {useEffect, useState} from "react";
+import * as React from "react";
+import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
+import Title from "../dashboard/Title";
+import { useDispatch } from "react-redux";
+import { get_profile } from "../_actions/userAction";
+import { useEffect, useState } from "react";
 
 export default function BriefProfile() {
   const dispatch = useDispatch();
@@ -12,29 +12,29 @@ export default function BriefProfile() {
   const [email, setEmail] = useState("Null");
 
   useEffect(() => {
-  dispatch(get_profile())
+    dispatch(get_profile())
       .then((res) => {
-          setUsername(res.payload.username);
-          setEmail(res.payload.email);
+        setUsername(res.payload.username);
+        setEmail(res.payload.email);
       })
       .catch((err) => {
-          setUsername("Error");
-          setEmail("Error");
-      })
+        setUsername("Error");
+        setEmail("Error");
+      });
   }, [dispatch]);
 
   return (
     <React.Fragment>
       <Title>사용자</Title>
       <Typography component="p" variant="h4">
-          {username}
+        {username}
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
-          {email}
+        {email}
       </Typography>
       <div>
         <Link color="primary" href="/profile">
-            자세히 보기
+          자세히 보기
         </Link>
       </div>
     </React.Fragment>

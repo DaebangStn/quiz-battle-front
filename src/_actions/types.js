@@ -8,7 +8,6 @@ export const QUIZ_LIST = "page/QUIZ_LIST";
 export const QUIZ_UPDATE = "page/QUIZ_UPDATE";
 export const QUIZ_DELETE = "page/QUIZ_DELETE";
 
-
 export const REGISTER_USER = "user/REGISTER";
 export const LOGIN_USER = "user/LOGIN";
 export const GET_PROFILE = "user/PROFILE";

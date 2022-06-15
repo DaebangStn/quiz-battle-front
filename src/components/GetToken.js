@@ -1,3 +1,3 @@
-export default function GetToken(){
-    return localStorage.getItem('AuthToken');
+export default function GetToken() {
+  return localStorage.getItem("AuthToken");
 }
