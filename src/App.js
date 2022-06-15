@@ -11,6 +11,8 @@ import CreateQuiz from "./quizzes/CreateQuiz";
 import QuizRoom from "./quizzes/QuizRoom";
 import AvailableGames from "./quizzes/AvailableGames";
 import UpdateQuiz from "./quizzes/UpdateQuiz";
+import PasswordConfirm from "./user/PasswordConfirm";
+import PasswordReset from "./user/PasswordReset";
 
 function App() {
 
@@ -23,6 +25,8 @@ function App() {
               <Route path="/quiz/available" element={<Private Component={AvailableGames}/>}/>
               <Route path="/quiz/update/:slug" element={<Private Component={UpdateQuiz}/>}/>
               <Route path="/quiz/:slug" element={<Private Component={QuizRoom}/>}/>
+              <Route path="/password/reset/confirm" element={<PasswordConfirm/>}/>
+              <Route path="/password/reset" element={<PasswordReset/>}/>
               <Route path="/signin" element={<SignIn/>}/>
               <Route path="/signup" element={<SignUp/>}/>
               <Route path="/signout" element={<SignOut/>}/>

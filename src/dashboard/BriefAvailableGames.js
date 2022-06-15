@@ -35,7 +35,7 @@ export default function BriefAvailableGames() {
   useEffect(() => {
     dispatch(quiz_list())
         .then((res) => {
-          console.log(res.payload);
+          console.log(res);
 
           res.payload.forEach((row, j) => {
               let memberString = "";
@@ -59,7 +59,9 @@ export default function BriefAvailableGames() {
         .catch((err) => {
           console.log(err);
         })
-  }, [dispatch])
+
+      // eslint-disable-next-line
+  }, [])
 
   return (
     <React.Fragment>

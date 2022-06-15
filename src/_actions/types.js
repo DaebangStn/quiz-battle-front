@@ -13,3 +13,5 @@ export const REGISTER_USER = "user/REGISTER";
 export const LOGIN_USER = "user/LOGIN";
 export const GET_PROFILE = "user/PROFILE";
 export const GET_LIST = "user/LIST";
+export const GET_PASSWORD_TOKEN = "user/GET_PASSWORD_TOKEN";
+export const CONFIRM_PASSWORD = "user/CONFIRM_PASSWORD";

@@ -14,6 +14,7 @@ import {useDispatch} from "react-redux";
 import {signin} from "../_actions/userAction";
 import {setAuthToken} from "../utils/axios";
 import {store} from "../index";
+import {USER_MESSAGE_FAILED} from "../_reducers/userReducer";
 
 const theme = createTheme();
 
@@ -31,14 +32,15 @@ export default function SignIn() {
     };
     dispatch(signin(body))
         .then((res) => {
-            if(store.getState().user.success){
-                localStorage.setItem('AuthToken', res.payload.token);
-                setAuthToken(localStorage.AuthToken);
-                navigate('/dashboard');
-            }else{
+            let message = store.getState().user.message;
+            if(message === USER_MESSAGE_FAILED) {
                 alert("로그인에 실패하였습니다.");
                 localStorage.removeItem('AuthToken');
                 setAuthToken(localStorage.AuthToken);
+            }else{
+                localStorage.setItem('AuthToken', res.payload.token);
+                setAuthToken(localStorage.AuthToken);
+                navigate('/dashboard');
             }
         })
         .catch((err) => {
@@ -96,7 +98,7 @@ export default function SignIn() {
                 로그인
             </Button>
             <Grid container direction={"column"}>
-              <Grid item xs component={Link} to="/reset-password">
+              <Grid item xs component={Link} to="/password/reset">
                   비밀번호를 잊으셨나요?
               </Grid>
               <Grid item component={Link} to="/signup">
