@@ -10,7 +10,8 @@ const initialState = {
 
 export const PAGE_MESSAGE_START_ACCEPTED = "quiz room is now started, going next round";
 export const PAGE_MESSAGE_ANSWER_CORRECT = "answer is correct, going next round";
-export const PAGE_MESSAGE_FORBIDDEN = "Request failed with status code 403"
+export const PAGE_MESSAGE_FORBIDDEN = "Request failed with status code 403";
+export const PAGE_MESSAGE_NOT_FOUND = "Request failed with status code 404";
 
 export default function user (state = initialState, action) {
     switch (action.type){

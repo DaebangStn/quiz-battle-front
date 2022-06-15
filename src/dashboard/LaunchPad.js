@@ -49,7 +49,6 @@ export default function LaunchPad() {
                   fontSize: "20px"
           }}
               onClick={handleGameParticipate}
-              href="#"
           >
               게임 참여하기
           </Button>

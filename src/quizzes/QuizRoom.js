@@ -26,7 +26,7 @@ import Button from "@mui/material/Button";
 import useInterval from "../utils/useInterval";
 import {
     PAGE_MESSAGE_ANSWER_CORRECT,
-    PAGE_MESSAGE_FORBIDDEN,
+    PAGE_MESSAGE_FORBIDDEN, PAGE_MESSAGE_NOT_FOUND,
     PAGE_MESSAGE_START_ACCEPTED
 } from "../_reducers/pageReducer";
 import {toast_basic_error, toast_basic_info, toast_basic_success} from "../utils/toastifies";
@@ -152,8 +152,12 @@ function QuizRoomContent() {
       dispatch(quiz_status(slug))
           .then((res) => {
               console.log(res);
-              if(store.getState().page.message === PAGE_MESSAGE_FORBIDDEN){
+              const message = store.getState().page.message;
+              if(message === PAGE_MESSAGE_FORBIDDEN){
                   toast_basic_error("참가자가 아닙니다 참여할 수 없습니다");
+                  navigate('/dashboard');
+              }else if(message === PAGE_MESSAGE_NOT_FOUND){
+                  toast_basic_error("해당하는 이름의 퀴즈가 없습니다");
                   navigate('/dashboard');
               }
 
