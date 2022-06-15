@@ -21,11 +21,9 @@ setAuthToken(localStorage.AuthToken);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-      <Provider store={store}>
-          <App/>
-      </Provider>
-  </React.StrictMode>
+    <Provider store={store}>
+        <App/>
+    </Provider>
 );
 
 // If you want to start meas    uring performance in your app, pass a function

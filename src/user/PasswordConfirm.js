@@ -15,6 +15,7 @@ import {useDispatch} from "react-redux";
 import {confirm_password} from "../_actions/userAction";
 import {store} from "../index";
 import {USER_MESSAGE_FAILED, USER_MESSAGE_NOT_FOUND} from "../_reducers/userReducer";
+import {toast_basic_error, toast_basic_success, toast_basic_warn} from "../utils/toastifies";
 
 const theme = createTheme();
 
@@ -39,12 +40,12 @@ export default function PasswordConfirm(){
                   console.log(res);
                   const message = store.getState().user.message;
                   if(message === USER_MESSAGE_FAILED){
-                      alert("요청에 실패했습니다");
+                      toast_basic_error("요청에 실패했습니다");
                       console.log(res.payload.request.response);
                   }else if(message === USER_MESSAGE_NOT_FOUND){
-                      alert("요청에 실패했습니다");
+                      toast_basic_error("요청에 실패했습니다");
                   }else{
-                      alert("비밀번호 변경에 성공했습니다");
+                      toast_basic_success("비밀번호 변경에 성공했습니다");
                       navigate('/signin');
                   }
               })
@@ -52,7 +53,7 @@ export default function PasswordConfirm(){
                   console.log(err);
               })
       }else{
-          alert("비밀번호가 확인과 일치하지 않습니다");
+          toast_basic_warn("비밀번호가 확인과 일치하지 않습니다");
     }
   }
 

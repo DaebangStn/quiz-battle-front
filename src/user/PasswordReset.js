@@ -14,6 +14,12 @@ import {useDispatch} from "react-redux";
 import {get_password_token} from "../_actions/userAction";
 import {store} from "../index";
 import {USER_MESSAGE_FAILED} from "../_reducers/userReducer";
+import {
+    toast_basic_error,
+    toast_basic_loading,
+    toast_basic_update_error,
+    toast_basic_update_success
+} from "../utils/toastifies";
 
 const theme = createTheme();
 
@@ -24,19 +30,21 @@ export default function PasswordReset(){
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
+    const id = toast_basic_loading("요청중입니다...");
     dispatch(get_password_token(data.get('email')))
         .then((res) => {
             console.log(res);
             const message = store.getState().user.message;
             if(message === USER_MESSAGE_FAILED){
-                alert("요청에 실패했습니다 유효한 메일인지 확인해주세요");
+                toast_basic_update_error(id, "요청에 실패했습니다 유효한 메일인지 확인해주세요");
             }else{
-                alert("성공적으로 요청했습니다 메일함을 확인해주세요");
+                toast_basic_update_success(id, "성공적으로 요청했습니다 메일함을 확인해주세요");
             }
         })
         .catch((err) => {
             console.log(err);
-        })
+                toast_basic_update_error(id, "서버에 장애가 생겼습니다");
+        });
   }
 
   return (

@@ -24,6 +24,7 @@ import {useDispatch} from "react-redux";
 import {store} from "../index";
 import {get_list} from "../_actions/userAction";
 import {useNavigate} from "react-router-dom";
+import {toast_basic_error, toast_basic_success} from "../utils/toastifies";
 
 const drawerWidth = 240;
 
@@ -122,11 +123,11 @@ function CreateQuizContent() {
       dispatch(quiz_create(slug, body))
           .then((res) => {
             console.log(res);
-            alert("퀴즈를 만들었습니다");
+            toast_basic_success("퀴즈를 만들었습니다");
             navigate(`/quiz/${slug}`);
           })
           .catch((err) => {
-            alert("퀴즈를 만들지 못하였습니다.");
+            toast_basic_error("퀴즈를 만들지 못하였습니다.");
             console.log(err);
           });
   }

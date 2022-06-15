@@ -13,6 +13,8 @@ import AvailableGames from "./quizzes/AvailableGames";
 import UpdateQuiz from "./quizzes/UpdateQuiz";
 import PasswordConfirm from "./user/PasswordConfirm";
 import PasswordReset from "./user/PasswordReset";
+import {ToastContainer} from "react-toastify";
+import * as React from "react";
 
 function App() {
 
@@ -26,12 +28,13 @@ function App() {
               <Route path="/quiz/update/:slug" element={<Private Component={UpdateQuiz}/>}/>
               <Route path="/quiz/:slug" element={<Private Component={QuizRoom}/>}/>
               <Route path="/password/reset/confirm" element={<PasswordConfirm/>}/>
-              <Route path="/password/reset" element={<PasswordReset/>}/>
               <Route path="/signin" element={<SignIn/>}/>
               <Route path="/signup" element={<SignUp/>}/>
               <Route path="/signout" element={<SignOut/>}/>
+              <Route path="/password/reset" element={<PasswordReset/>}/>
               <Route path="*" element={<Navigate to="/dashboard" replace/>}/>
           </Routes>
+          <ToastContainer/>
           <StickyFooter />
       </BrowserRouter>
   );

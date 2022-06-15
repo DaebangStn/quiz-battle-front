@@ -25,11 +25,12 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import {Autocomplete} from "@mui/material";
 import {get_list} from "../_actions/userAction";
-import {ToastContainer, toast} from "react-toastify";
+import {toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import ListItemIcon from "@mui/material/ListItemIcon";
 import {ContentCopy} from "@mui/icons-material";
 import {PAGE_MESSAGE_FORBIDDEN} from "../_reducers/pageReducer";
+import {toast_basic_error, toast_basic_success} from "../utils/toastifies";
 
 const drawerWidth = 240;
 
@@ -133,9 +134,9 @@ function UpdateQuizContent() {
               console.log(res);
               const message = store.getState().page.message;
               if(message === PAGE_MESSAGE_FORBIDDEN){
-                  alert("권한이 없습니다");
+                  toast_basic_error("권한이 없습니다");
               }else{
-                  alert("수정되었습니다");
+                  toast_basic_success("수정되었습니다");
               }
           })
           .catch((err) => {
@@ -168,11 +169,11 @@ function UpdateQuizContent() {
               const message = store.getState().page.message;
               const msg_arr = message.split(' ');
               if(message === PAGE_MESSAGE_FORBIDDEN){
-                  alert("권한이 없습니다");
+                  toast_basic_error("권한이 없습니다");
               }else if(msg_arr[msg_arr.length - 1] === 'deleted'){
-                  alert("삭제되었습니다");
+                  toast_basic_success("삭제되었습니다");
               }else{
-                  alert("오류가 발생했습니다");
+                  toast_basic_error("오류가 발생했습니다");
               }
           })
           .catch((err) => {
@@ -338,11 +339,6 @@ function UpdateQuizContent() {
                           </ListItemIcon>
                       </Grid>
                   </Grid>
-                  <ToastContainer
-                      hideProgressBar
-                      closeOnClick
-                      autoClose={1000}
-                  />
               </Grid>
             </Grid>
               <Grid

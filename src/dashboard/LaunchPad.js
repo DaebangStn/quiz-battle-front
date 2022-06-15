@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {toast_basic_info} from "../utils/toastifies";
 
 export default function LaunchPad() {
     const [val, setVal] = useState("");
@@ -20,7 +21,7 @@ export default function LaunchPad() {
         const roomName = val;
         const slug = roomName.replaceAll(' ', '-').toLowerCase();
         console.log(slug);
-        alert(`게임방 [${roomName}]에 참가합니다.`);
+        toast_basic_info(`게임방 [${roomName}]에 참가합니다.`);
         navigate(`/quiz/${slug}`);
     }
 

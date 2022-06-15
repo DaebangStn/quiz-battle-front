@@ -14,6 +14,7 @@ import {useNavigate} from "react-router-dom";
 
 import {useDispatch} from "react-redux";
 import {signup} from "../_actions/userAction";
+import {toast_basic_error, toast_basic_success, toast_basic_warn} from "../utils/toastifies";
 
 
 const theme = createTheme();
@@ -35,15 +36,15 @@ export default function SignUp() {
       dispatch(signup(body))
           .then((res) => {
             console.log(res);
-            alert("가입이 완료되었습니다");
+            toast_basic_success(`${data.get('username')}님 가입을 환영합니다`);
             navigate('/signin');
           })
           .catch((err) => {
-            alert("가입에 실패하였습니다.");
+            toast_basic_error("가입에 실패하였습니다");
             console.log(err);
           });
     }else{
-      alert("비밀번호가 확인과 일치하지 않습니다");
+      toast_basic_warn("비밀번호가 확인과 일치하지 않습니다");
     }
   };
 

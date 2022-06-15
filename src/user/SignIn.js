@@ -15,6 +15,7 @@ import {signin} from "../_actions/userAction";
 import {setAuthToken} from "../utils/axios";
 import {store} from "../index";
 import {USER_MESSAGE_FAILED} from "../_reducers/userReducer";
+import {toast_basic_error, toast_basic_success} from "../utils/toastifies";
 
 const theme = createTheme();
 
@@ -32,22 +33,24 @@ export default function SignIn() {
     };
     dispatch(signin(body))
         .then((res) => {
+            console.log(res);
             let message = store.getState().user.message;
             if(message === USER_MESSAGE_FAILED) {
-                alert("로그인에 실패하였습니다.");
+                toast_basic_error("로그인에 실패하였습니다");
                 localStorage.removeItem('AuthToken');
                 setAuthToken(localStorage.AuthToken);
             }else{
                 localStorage.setItem('AuthToken', res.payload.token);
                 setAuthToken(localStorage.AuthToken);
                 navigate('/dashboard');
+                toast_basic_success(`안녕하세요 ${res.payload.username}님`);
             }
         })
         .catch((err) => {
-            alert("로그인에 실패하였습니다.");
+            console.log(err);
+            toast_basic_error("로그인에 실패하였습니다");
             localStorage.removeItem('AuthToken');
             setAuthToken(localStorage.AuthToken);
-            console.log(err);
         });
 
   };

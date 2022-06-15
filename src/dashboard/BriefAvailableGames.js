@@ -10,10 +10,6 @@ import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {quiz_list} from "../_actions/pageAction";
 
-function preventDefault(event) {
-  event.preventDefault();
-}
-
 export default function BriefAvailableGames() {
   const [list, setList] = useState([]);
   const [more, setMore] = useState(false);
@@ -33,33 +29,19 @@ export default function BriefAvailableGames() {
   }
 
   useEffect(() => {
-    dispatch(quiz_list())
-        .then((res) => {
-          console.log(res);
-
-          res.payload.forEach((row, j) => {
-              let memberString = "";
-                  row.participants.forEach((item, i) => {
-
-                  if(i === 0){
-                      memberString = item.username;
-                  }else{
-                      memberString += ', ' + item.username;
-                  }
+      dispatch(quiz_list())
+          .then((res) => {
+              console.log(res);
+              res.payload.forEach((row, j) => {
+                  row.memberString =
+                      row.participants.map(a=>a.username).toString();
               })
-              row.memberString = memberString;
-          })
-          setList(res.payload.slice(0, 5));
-          if(res.payload.length > 5){
-              setMore(true);
-          }else{
-              setMore(false);
-          }
+              setList(res.payload.slice(0, 5));
+              setMore((res.payload.length > 5));
         })
         .catch((err) => {
-          console.log(err);
+            console.log(err);
         })
-
       // eslint-disable-next-line
   }, [])
 
@@ -87,7 +69,7 @@ export default function BriefAvailableGames() {
             {dottedElement}
         </TableBody>
       </Table>
-      <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
+      <Link color="primary" href="/quiz/available" sx={{ mt: 3 }}>
         더보기
       </Link>
     </React.Fragment>

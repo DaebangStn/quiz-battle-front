@@ -29,6 +29,7 @@ import {
     PAGE_MESSAGE_FORBIDDEN,
     PAGE_MESSAGE_START_ACCEPTED
 } from "../_reducers/pageReducer";
+import {toast_basic_error, toast_basic_info, toast_basic_success} from "../utils/toastifies";
 
 const drawerWidth = 240;
 
@@ -118,9 +119,9 @@ function QuizRoomContent() {
               .then((res) => {
                   console.log(res);
                   if(store.getState().page.message === PAGE_MESSAGE_START_ACCEPTED) {
-                      alert("퀴즈를 시작합니다");
+                      toast_basic_info("퀴즈를 시작합니다");
                   }else{
-                      alert("방장만 퀴즈를 시작할 수 있습니다");
+                      toast_basic_error("방장만 퀴즈를 시작할 수 있습니다");
                   }
               })
               .catch((err) => {
@@ -133,11 +134,11 @@ function QuizRoomContent() {
                   console.log(res);
 
                   if(store.getState().page.message === PAGE_MESSAGE_ANSWER_CORRECT){
-                      alert("정답입니다");
+                      toast_basic_success("정답입니다");
                       setSolved(true);
                       refreshQuiz(true);
                   }else{
-                      alert("틀렸습니다");
+                      toast_basic_error("틀렸습니다");
                       refreshQuiz();
                   }
               })
@@ -155,12 +156,12 @@ function QuizRoomContent() {
           .then((res) => {
               console.log(res);
               if(store.getState().page.message === PAGE_MESSAGE_FORBIDDEN){
-                  alert("참가자가 아닙니다. 참여할 수 없습니다");
+                  toast_basic_error("참가자가 아닙니다 참여할 수 없습니다");
                   navigate('/dashboard');
               }
 
               if(!ignore_round && round !== res.payload.round){
-                  alert("다른 사람이 이미 맞추었습니다");
+                  toast_basic_error("다른 사람이 이미 맞추었습니다");
               }
 
               setName(res.payload.name);
