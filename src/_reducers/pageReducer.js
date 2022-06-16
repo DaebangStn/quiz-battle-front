@@ -10,7 +10,7 @@ import {
 } from "../_actions/types";
 
 const initialState = {
-  showSidebar: false,
+  showSidebar: true,
   message: "",
 };
 
