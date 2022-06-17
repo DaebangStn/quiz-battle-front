@@ -20,7 +20,6 @@ export default function LaunchPad() {
     event.preventDefault();
     const roomName = val;
     const slug = roomName.replaceAll(" ", "-").toLowerCase();
-    console.log(slug);
     toast_basic_info(`게임방 [${roomName}]에 참가합니다.`);
     navigate(`/quiz/${slug}`);
   };

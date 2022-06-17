@@ -93,6 +93,7 @@ function QuizRoomContent() {
   const [open, setOpen] = React.useState(store.getState().page.showSidebar);
   const [name, setName] = useState("No Name");
   const [round, setRound] = useState(-1);
+  const [answer, setAnswer] = useState(null);
   const [quiz, setQuiz] = useState("No Quiz");
 
   const answerInput = useRef(null);
@@ -100,9 +101,10 @@ function QuizRoomContent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useInterval(() => {
-    refreshQuiz(round);
-  }, 600);
+  useEffect(() => {
+    let id = setInterval(refreshQuiz, 150);
+    return () => clearInterval(id);
+  }, [round, answer]);
 
   const toggleDrawer = () => {
     dispatch(toggle_sidebar());
@@ -127,50 +129,56 @@ function QuizRoomContent() {
           refreshQuiz();
         });
     } else {
-      dispatch(quiz_submit(slug, answerInput.current.value))
+      setAnswer(answerInput.current.value);
+      answerInput.current.value = "";
+    }
+  };
+
+  const refreshQuiz = () => {
+    if (answer) {
+      setAnswer((ans) => {
+        dispatch(quiz_submit(slug, answer))
+          .then((res) => {
+            console.log(res);
+
+            if (store.getState().page.message === PAGE_MESSAGE_ANSWER_CORRECT) {
+              toast_basic_success("정답입니다");
+              setRound(round + 1);
+            } else {
+              toast_basic_error("틀렸습니다");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        return null;
+      });
+    } else {
+      dispatch(quiz_status(slug))
         .then((res) => {
           console.log(res);
-
-          if (store.getState().page.message === PAGE_MESSAGE_ANSWER_CORRECT) {
-            toast_basic_success("정답입니다");
-            setRound(round + 1);
-          } else {
-            toast_basic_error("틀렸습니다");
+          const message = store.getState().page.message;
+          if (message === PAGE_MESSAGE_FORBIDDEN) {
+            toast_basic_error("참가자가 아닙니다 참여할 수 없습니다");
+            navigate("/dashboard");
+          } else if (message === PAGE_MESSAGE_NOT_FOUND) {
+            toast_basic_error("해당하는 이름의 퀴즈가 없습니다");
+            navigate("/dashboard");
           }
+
+          console.log(round);
+          if (!(round === -1) && round !== res.payload.round) {
+            toast_basic_error("다른 사람이 이미 맞추었습니다");
+          }
+
+          setName(res.payload.name);
+          setRound(res.payload.round);
+          setQuiz(res.payload.quiz);
         })
         .catch((err) => {
           console.log(err);
         });
     }
-
-    answerInput.current.value = "";
-  };
-
-  const refreshQuiz = (round) => {
-    dispatch(quiz_status(slug))
-      .then((res) => {
-        console.log(res);
-        const message = store.getState().page.message;
-        if (message === PAGE_MESSAGE_FORBIDDEN) {
-          toast_basic_error("참가자가 아닙니다 참여할 수 없습니다");
-          navigate("/dashboard");
-        } else if (message === PAGE_MESSAGE_NOT_FOUND) {
-          toast_basic_error("해당하는 이름의 퀴즈가 없습니다");
-          navigate("/dashboard");
-        }
-
-        console.log(round);
-        if (!(round === -1) && round !== res.payload.round) {
-          toast_basic_error("다른 사람이 이미 맞추었습니다");
-        }
-
-        setName(res.payload.name);
-        setRound(res.payload.round);
-        setQuiz(res.payload.quiz);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   return (
